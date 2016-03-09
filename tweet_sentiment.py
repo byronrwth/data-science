@@ -19,7 +19,7 @@ def twitterDict(file):
     for line in twitterData:
         twitter_list_dict.append( json.loads(line.decode('utf-8-sig')) )
 
-    print "length: " , len(twitter_list_dict)
+    #print "length: " , len(twitter_list_dict)
     return twitter_list_dict
 
 
@@ -43,6 +43,7 @@ def sentimentDict( data ):
             term, score = l[0], l[1]
             #print "len 2: term = ", term, "score = ", score
         else:
+            #term = u' '.join
             term, score = l[:-1], l[-1]
             #print "len 3: term = ", term, "score = ", score
 
@@ -50,7 +51,7 @@ def sentimentDict( data ):
         scores[str(term)] = int(score)  # dict[list]
         #print "scores of term : ", term, scores["term"]
 
-    print scores.keys()
+    #print scores.keys()
     return scores
 
 
@@ -71,20 +72,27 @@ def main():
 
     for index in range(len(tweets)):
         score = 0
-        tweet_wordlist = tweets[index]["text"].split()
+        if "text" in tweets[index].keys():
+            tweet_wordlist = tweets[index]["text"].split()
 
         #print tweet_wordlist
 
-
-
-        for word in tweet_wordlist:
+            for word in tweet_wordlist:
             #print "type of word: ", type(word)   #unicode
-            print word
+            #print word
+                newword = word.encode('utf-8')
+            #print newword
+            #print "type of newword: ", type(newword)   #unicode
 
-            if str(word) in sentiment.keys():
-                print "point= ", sentiment[str(word)]
-            #score += sentiment[word]
-    #"""
+
+                if newword in sentiment.keys():
+                    #print newword
+                    #print "point= ", sentiment[newword]
+                    score += sentiment[newword]
+
+
+        print score
+
 
 if __name__ == '__main__':
     main()
